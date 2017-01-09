@@ -1,0 +1,87 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
+    defaultConfig {
+        applicationId "uk.me.paulriley.typicodeclient"
+        minSdkVersion 21
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0"
+
+        testApplicationId "uk.me.paulriley.typicodeclient.stepDefinitions"
+        testInstrumentationRunner "uk.me.paulriley.typicodeclient.helpers.Instrumentation"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    packagingOptions {
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/ASL2.0'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'LICENSE.txt'
+    }
+}
+
+// Task to retrieve Cucumber test reports
+gradle.taskGraph.afterTask { task, TaskState state ->
+    if ((task == connectedAndroidTest) || (task == connectedCheck)) {
+        def reportDir = new File(project.buildDir, "cucumber-reports")
+        if (!reportDir.exists()) {
+            reportDir.mkdirs()
+        }
+        println 'Retrieving Cucumber test report to ' + project.buildDir
+        def processBuilder = new ProcessBuilder(
+                ['adb', 'pull', '/mnt/sdcard/cucumber-reports/', reportDir.getAbsolutePath()])
+        processBuilder.start()
+    }
+}
+
+// Read Cucumber tags from command line like: ./gradlew connectedAndroidTest -Dtags="@login-scenarios,@kitkat"
+def getTestTags() {
+    return project.hasProperty("tags") ? project.getProperties().get("tags") : ""
+}
+
+task(fetchReports) << {
+    def reportDir = new File(project.buildDir, "cucumber-reports")
+    if (!reportDir.exists()) {
+        reportDir.mkdirs()
+    }
+    println 'Retrieving Cucumber test report to ' + project.buildDir
+    def processBuilder = new ProcessBuilder(
+            ['adb', 'pull', '/mnt/sdcard/com.autodesk.autocadws.staging.debug/aaa', reportDir.getAbsolutePath()])
+    processBuilder.start()
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile 'com.android.support:appcompat-v7:25.1.0'
+    compile 'com.android.support.constraint:constraint-layout:1.0.0-beta4'
+    testCompile 'junit:junit:4.12'
+
+    androidTestCompile('info.cukes:cucumber-android:1.2.5') {
+        exclude module: 'cucumber-jvm-deps'
+    }
+    androidTestCompile('info.cukes:cucumber-picocontainer:1.2.5') {
+        exclude module: 'cucumber-jvm-deps'
+    }
+
+    androidTestCompile 'info.cukes:cucumber-jvm-deps:1.0.5'
+
+    compile 'com.jakewharton.rxbinding:rxbinding:1.0.0'
+    compile 'com.jakewharton.rxbinding:rxbinding-appcompat-v7:1.0.0'
+    compile 'io.reactivex:rxandroid:1.2.1'
+    compile 'io.reactivex:rxjava:1.2.1'
+}
