@@ -11,7 +11,8 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
-public class ActivityFinisher implements Runnable {
+
+public final class ActivityFinisher implements Runnable {
 
     public static void finishOpenActivities() {
         new Handler(Looper.getMainLooper()).post(new ActivityFinisher());

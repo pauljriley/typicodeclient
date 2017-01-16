@@ -1,8 +1,10 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.neenbedankt.android-apt'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    buildToolsVersion '25.0.2'
+
     defaultConfig {
         applicationId "uk.me.paulriley.typicodeclient"
         minSdkVersion 21
@@ -10,15 +12,25 @@ android {
         versionCode 1
         versionName "1.0"
 
-        testApplicationId "uk.me.paulriley.typicodeclient.stepDefinitions"
-        testInstrumentationRunner "uk.me.paulriley.typicodeclient.helpers.Instrumentation"
+        testInstrumentationRunner "uk.me.paulriley.typicodeclient.cucumber.runner.CucumberTestRunner"
     }
 
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        debug {
+            debuggable true
+            buildConfigField "String", "TEST_TAGS", "\"${getTestTags()}\""
+        }
+    }
+    dexOptions {
+        javaMaxHeapSize "2048M"
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
     }
 
     packagingOptions {
@@ -33,6 +45,9 @@ android {
 }
 
 // Task to retrieve Cucumber test reports
+// The report path in this task depends on the path used in CucumberTestCase.java under @CucumberOptions
+// The report path for emulator and real device differ depending on read permissions
+// and SD-card presence respectively
 gradle.taskGraph.afterTask { task, TaskState state ->
     if ((task == connectedAndroidTest) || (task == connectedCheck)) {
         def reportDir = new File(project.buildDir, "cucumber-reports")
@@ -51,37 +66,78 @@ def getTestTags() {
     return project.hasProperty("tags") ? project.getProperties().get("tags") : ""
 }
 
-task(fetchReports) << {
-    def reportDir = new File(project.buildDir, "cucumber-reports")
-    if (!reportDir.exists()) {
-        reportDir.mkdirs()
-    }
-    println 'Retrieving Cucumber test report to ' + project.buildDir
-    def processBuilder = new ProcessBuilder(
-            ['adb', 'pull', '/mnt/sdcard/com.autodesk.autocadws.staging.debug/aaa', reportDir.getAbsolutePath()])
-    processBuilder.start()
-}
-
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
+
+    compile 'com.android.support:multidex:1.0.1'
     compile 'com.android.support:appcompat-v7:25.1.0'
+    compile 'com.android.support:recyclerview-v7:25.1.0'
+    compile 'com.android.support:cardview-v7:25.1.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.0-beta4'
+
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
+
     testCompile 'junit:junit:4.12'
+    testCompile 'org.mockito:mockito-core:1.10.19'
+    testCompile 'com.jcabi:jcabi-matchers:1.3'
 
-    androidTestCompile('info.cukes:cucumber-android:1.2.5') {
+    androidTestCompile 'junit:junit:4.12'
+    androidTestCompile 'org.mockito:mockito-core:1.10.19'
+    androidTestCompile 'com.jcabi:jcabi-matchers:1.3'
+
+    androidTestCompile 'com.google.dexmaker:dexmaker:1.2'
+    androidTestCompile 'com.google.dexmaker:dexmaker-mockito:1.2'
+    androidTestCompile 'org.hamcrest:hamcrest-core:1.3'
+    androidTestCompile 'org.hamcrest:hamcrest-integration:1.3'
+    androidTestCompile 'org.hamcrest:hamcrest-library:1.3'
+
+    //Runner
+    androidTestCompile( 'com.android.support.test:runner:0.5' ){
+        exclude group: 'com.android.support', module: 'support-annotations'
+        exclude group: 'com.android.support', module: 'support-v4'
+        exclude group: 'com.android.support', module: 'recyclerview-v7'
+    }
+
+    androidTestCompile('info.cukes:cucumber-android:1.2.4') {
+        exclude module: 'cucumber-jvm-deps'
+        exclude group: 'com.google.guava', module: 'guava'
+    }
+    androidTestCompile('info.cukes:cucumber-picocontainer:1.2.4') {
         exclude module: 'cucumber-jvm-deps'
     }
-    androidTestCompile('info.cukes:cucumber-picocontainer:1.2.5') {
-        exclude module: 'cucumber-jvm-deps'
+    androidTestCompile 'info.cukes:cucumber-jvm-deps:1.0.3'
+
+    //Espresso
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2') {
+        exclude group: 'com.android.support', module: 'support-annotations'
+        exclude group: 'com.android.support', module: 'support-v4'
+        exclude group: 'com.android.support', module: 'recyclerview-v7'
     }
+    androidTestCompile('com.android.support.test.espresso:espresso-contrib:2.2.2') {
+        exclude group: 'com.android.support', module: 'support-annotations'
+        exclude group: 'com.android.support', module: 'support-v4'
+        exclude group: 'com.android.support', module: 'recyclerview-v7'
+        exclude group: 'com.android.support', module: 'appcompat-v7'
+        exclude group: 'com.android.support', module: 'design'
+    }
+    
+    // Screenshots
+    androidTestCompile 'com.squareup.spoon:spoon-client:1.2.0'
 
-    androidTestCompile 'info.cukes:cucumber-jvm-deps:1.0.5'
+    provided 'com.squareup.dagger:dagger-compiler:1.2.2'
+    compile 'com.squareup.dagger:dagger:1.2.5'
 
-    compile 'com.jakewharton.rxbinding:rxbinding:1.0.0'
-    compile 'com.jakewharton.rxbinding:rxbinding-appcompat-v7:1.0.0'
-    compile 'io.reactivex:rxandroid:1.2.1'
-    compile 'io.reactivex:rxjava:1.2.1'
+    compile 'com.squareup.retrofit2:retrofit:2.0.0-beta3'
+    compile 'com.squareup.retrofit2:converter-gson:2.0.0-beta3'
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.0.0-beta3'
+    compile 'com.squareup.okhttp3:okhttp:3.0.1'
+
+    compile 'com.jakewharton:butterknife:8.4.0'
+    apt 'com.jakewharton:butterknife-compiler:8.4.0'
+
+    compile 'com.github.johnkil.android-robototextview:robototextview:2.4.2'
+
+    compile 'io.reactivex:rxjava:1.0.14'
+    compile 'io.reactivex:rxandroid:1.0.1'
 }
