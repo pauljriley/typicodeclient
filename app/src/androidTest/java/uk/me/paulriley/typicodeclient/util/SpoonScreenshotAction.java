@@ -14,6 +14,8 @@ import org.hamcrest.Matchers;
 
 import java.io.File;
 
+import uk.me.paulriley.typicodeclient.TypicodeApplication;
+
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
 

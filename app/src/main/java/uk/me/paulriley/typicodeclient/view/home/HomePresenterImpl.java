@@ -1,9 +1,8 @@
 package uk.me.paulriley.typicodeclient.view.home;
 
 import android.content.Context;
-import android.util.Log;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import javax.inject.Inject;
 
@@ -13,10 +12,8 @@ import uk.me.paulriley.typicodeclient.TypicodeApplication;
 import uk.me.paulriley.typicodeclient.services.model.PostResultsModel;
 import uk.me.paulriley.typicodeclient.services.typicode.TypicodeFacade;
 import uk.me.paulriley.typicodeclient.services.typicode.TypicodeResults;
-import uk.me.paulriley.typicodeclient.view.home.homeList.ListResultsAdapterView;
 
 public class HomePresenterImpl implements HomePresenter {
-    @Inject ListResultsAdapterView mListResultsAdapter;
     @Inject TypicodeFacade mTypicodeFacade;
 
     private HomeView mView;
@@ -28,11 +25,6 @@ public class HomePresenterImpl implements HomePresenter {
     @Override
     public void initialise(HomeView view) {
         mView = view;
-        prepareNewListResults();
-    }
-
-    private void prepareNewListResults() {
-        mView.setAdapter(mListResultsAdapter);
     }
 
     @Override
@@ -47,7 +39,7 @@ public class HomePresenterImpl implements HomePresenter {
 
             results.getPosts()
                     .subscribeOn(Schedulers.io())
-                    .subscribe(new Subscriber<List<PostResultsModel>>() {
+                    .subscribe(new Subscriber<ArrayList<PostResultsModel>>() {
                         @Override
                         public void onCompleted() {
                         }
@@ -57,7 +49,7 @@ public class HomePresenterImpl implements HomePresenter {
                         }
 
                         @Override
-                        public void onNext(List<PostResultsModel> postResultsModel) {
+                        public void onNext(ArrayList<PostResultsModel> postResultsModel) {
                             mView.updateData(postResultsModel);
                         }
                     });

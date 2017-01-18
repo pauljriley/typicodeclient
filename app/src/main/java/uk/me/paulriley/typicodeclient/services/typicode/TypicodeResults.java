@@ -1,6 +1,6 @@
 package uk.me.paulriley.typicodeclient.services.typicode;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import rx.Observable;
 import uk.me.paulriley.typicodeclient.services.model.CommentResultsModel;
@@ -14,15 +14,15 @@ public class TypicodeResults {
         this.icndb = icndb;
     }
 
-    public Observable<List<PostResultsModel>> getPosts() {
+    public Observable<ArrayList<PostResultsModel>> getPosts() {
         return icndb.getPosts();
     }
 
-    public Observable<List<UserResultsModel>> getUsers() {
-        return icndb.getUsers();
+    public Observable<ArrayList<CommentResultsModel>> getPostComments(int postID) {
+        return icndb.getPostComments(postID);
     }
 
-    public Observable<List<CommentResultsModel>> getComments() {
-        return icndb.getComments();
+    public Observable<UserResultsModel> getUser(int userID) {
+        return icndb.getUser(userID);
     }
 }

@@ -1,5 +1,6 @@
 package uk.me.paulriley.typicodeclient;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 
@@ -17,6 +18,7 @@ public class TypicodeApplication extends ApplicationExtension {
     public void onCreate() {
         super.onCreate();
         installLeakCanary();
+        Fresco.initialize(this);
 
         createInitialObjectGraph();
     }
@@ -29,7 +31,7 @@ public class TypicodeApplication extends ApplicationExtension {
 
     protected List<Object> getModules() {
         return Arrays.asList(
-                new ApplicationModule(this),
+                new ApplicationModule(),
                 new PresenterModule(this)
         );
     }

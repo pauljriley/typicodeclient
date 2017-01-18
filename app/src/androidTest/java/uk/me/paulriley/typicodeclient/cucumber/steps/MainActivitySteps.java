@@ -17,6 +17,7 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import dagger.ObjectGraph;
+import rx.Observable;
 import uk.me.paulriley.typicodeclient.TypicodeApplication;
 import uk.me.paulriley.typicodeclient.cucumber.pages.BasePage;
 import uk.me.paulriley.typicodeclient.cucumber.pages.DetailsPage;
@@ -27,6 +28,8 @@ import uk.me.paulriley.typicodeclient.util.CountingIdlingResourceListenerImpl;
 import uk.me.paulriley.typicodeclient.view.home.HomeActivity;
 
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.when;
+import static uk.me.paulriley.typicodeclient.cucumber.steps.TestModule.allPosts;
 
 @SuppressWarnings("JUnitTestCaseWithNoTests")
 @RunWith(AndroidJUnit4.class)
@@ -92,12 +95,13 @@ public class MainActivitySteps {
 
     @Given("^I see the main page$")
     public void i_see_the_main_page() {
+        when(testModule.mockTypicodeResults.getPosts()).thenReturn(Observable.just(allPosts()));
         mCurrentPage = new MainPage();
     }
 
     @Then("^I should see a list of posts$")
     public void i_should_see_list_of_posts() {
-        mCurrentPage.is(MainPage.class).checkPostsList();
+        mCurrentPage.is(MainPage.class).checkPostsList(allPosts());
     }
 
     @When("^I select a post$")

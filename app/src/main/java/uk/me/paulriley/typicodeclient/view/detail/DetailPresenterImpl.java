@@ -2,13 +2,14 @@ package uk.me.paulriley.typicodeclient.view.detail;
 
 import android.content.Context;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import javax.inject.Inject;
 
 import rx.Subscriber;
 import rx.schedulers.Schedulers;
 import uk.me.paulriley.typicodeclient.TypicodeApplication;
+import uk.me.paulriley.typicodeclient.services.model.CommentResultsModel;
 import uk.me.paulriley.typicodeclient.services.model.PostResultsModel;
 import uk.me.paulriley.typicodeclient.services.typicode.TypicodeFacade;
 import uk.me.paulriley.typicodeclient.services.typicode.TypicodeResults;
@@ -39,7 +40,7 @@ public class DetailPresenterImpl implements DetailPresenter {
 
             results.getPosts()
                     .subscribeOn(Schedulers.io())
-                    .subscribe(new Subscriber<List<PostResultsModel>>() {
+                    .subscribe(new Subscriber<ArrayList<PostResultsModel>>() {
                         @Override
                         public void onCompleted() {
                         }
@@ -49,7 +50,31 @@ public class DetailPresenterImpl implements DetailPresenter {
                         }
 
                         @Override
-                        public void onNext(List<PostResultsModel> postResultsModel) {
+                        public void onNext(ArrayList<PostResultsModel> postResultsModel) {
+                        }
+                    });
+        }
+    }
+
+    @Override
+    public void getComments(int postId) {
+        if (mTypicodeFacade != null) {
+            TypicodeResults results = mTypicodeFacade.getTypicodeResults();
+
+            results.getPostComments(postId)
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(new Subscriber<ArrayList<CommentResultsModel>>() {
+                        @Override
+                        public void onCompleted() {
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                        }
+
+                        @Override
+                        public void onNext(ArrayList<CommentResultsModel> commentResultsModels) {
+                            mView.updateData(commentResultsModels);
                         }
                     });
         }

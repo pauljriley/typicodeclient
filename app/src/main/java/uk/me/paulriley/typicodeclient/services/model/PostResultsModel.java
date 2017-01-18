@@ -8,6 +8,15 @@ public class PostResultsModel implements Serializable {
     private String title;
     private String body;
 
+    public PostResultsModel() {
+    }
+
+    public PostResultsModel(int userId, int Id, String title, String body) {
+        this.userId = userId;
+        this.Id = Id;
+        this.title = title;
+        this.body = body;
+    }
 
     public int getUserId() {
         return userId;

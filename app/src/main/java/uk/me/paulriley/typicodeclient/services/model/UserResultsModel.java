@@ -6,6 +6,7 @@ public class UserResultsModel implements Serializable {
     private int id;
     private String name;
     private String username;
+    private String email;
     private UserAddress address;
     private String phone;
     private String website;
@@ -65,6 +66,14 @@ public class UserResultsModel implements Serializable {
 
     public void setCompany(UserCompany company) {
         this.company = company;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     private class UserAddress implements Serializable {

@@ -29,8 +29,9 @@ public class PresenterModule {
         mContext = context;
     }
 
-    @Provides @Singleton
-    HomePresenter providesHomePrsenter() {
+    @Provides
+    @Singleton
+    HomePresenter providesHomePresenter() {
         if (mHomePresenter == null) {
             mHomePresenter = new HomePresenterImpl(mContext);
         }
@@ -38,8 +39,9 @@ public class PresenterModule {
         return mHomePresenter;
     }
 
-    @Provides @Singleton
-    DetailPresenter providesDetailPrsenter() {
+    @Provides
+    @Singleton
+    DetailPresenter providesDetailPresenter() {
         if (mDetailPresenter == null) {
             mDetailPresenter = new DetailPresenterImpl(mContext);
         }
