@@ -18,15 +18,19 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import dagger.ObjectGraph;
 import rx.Observable;
+import uk.me.paulriley.typicodeclient.R;
 import uk.me.paulriley.typicodeclient.TypicodeApplication;
 import uk.me.paulriley.typicodeclient.cucumber.pages.BasePage;
-import uk.me.paulriley.typicodeclient.cucumber.pages.DetailsPage;
 import uk.me.paulriley.typicodeclient.cucumber.pages.MainPage;
 import uk.me.paulriley.typicodeclient.injection.modules.PresenterModule;
 import uk.me.paulriley.typicodeclient.util.ActivityFinisher;
 import uk.me.paulriley.typicodeclient.util.CountingIdlingResourceListenerImpl;
 import uk.me.paulriley.typicodeclient.view.home.HomeActivity;
 
+import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.when;
 import static uk.me.paulriley.typicodeclient.cucumber.steps.TestModule.allPosts;
@@ -101,7 +105,7 @@ public class MainActivitySteps {
 
     @Then("^I should see a list of posts$")
     public void i_should_see_list_of_posts() {
-        mCurrentPage.is(MainPage.class).checkPostsList(allPosts());
+        mCurrentPage.is(MainPage.class).checkPostsList();
     }
 
     @When("^I select a post$")
@@ -111,6 +115,11 @@ public class MainActivitySteps {
 
     @Then("^I should see the posts details$")
     public void i_should_see_the_posts_details() {
-        mCurrentPage.is(DetailsPage.class);
+        onView(withId(R.id.activity_detail)).check(matches(isDisplayed()));
+    }
+
+    @Then("^I should see the detail of the post$")
+    public void i_should_see_detail_of_post() {
+        mCurrentPage.is(MainPage.class).checkPostDetails();
     }
 }

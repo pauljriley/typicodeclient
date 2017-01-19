@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -15,7 +16,9 @@ import uk.me.paulriley.typicodeclient.TypicodeApplication;
 import uk.me.paulriley.typicodeclient.services.model.CommentResultsModel;
 import uk.me.paulriley.typicodeclient.services.typicode.TypicodeFacade;
 
-public class CommentAdapter extends RecyclerView.Adapter {
+import static uk.me.paulriley.typicodeclient.support.util.StringFormating.fromHtml;
+
+public class CommentAdapter extends RecyclerView.Adapter<CommentsViewHolder> {
     @Inject TypicodeFacade mTypicodeFacade;
 
     private final Context context;
@@ -28,7 +31,7 @@ public class CommentAdapter extends RecyclerView.Adapter {
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public CommentsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         View view = LayoutInflater.from(context).inflate(R.layout.comment_card, parent, false);
         CommentsViewHolder viewHolder = new CommentsViewHolder(context, view);
@@ -36,9 +39,18 @@ public class CommentAdapter extends RecyclerView.Adapter {
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(CommentsViewHolder holder, int position) {
         CommentResultsModel comment = comments.get(position);
+        holder.commentName.setText(fromHtml(comment.getName()));
+        holder.comment.setText(fromHtml(comment.getBody()));
 
+        String imageUrl = String.format(Locale.getDefault()
+                , "http://api.adorable.io/avatar/%1$d/%2$s"
+                , 96
+                , comment.getEmail());
+
+        holder.setUserAvatar(imageUrl);
+        holder.userName.setText(fromHtml(comment.getEmail()));
     }
 
     @Override

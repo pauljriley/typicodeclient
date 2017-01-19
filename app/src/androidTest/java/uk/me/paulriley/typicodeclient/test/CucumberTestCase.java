@@ -10,7 +10,7 @@ import cucumber.api.CucumberOptions;
                 "junit:/data/data/uk.me.paulriley.typicodeclient/cucumber-reports/cucumber.xml"
         },
         tags={"~@manual",
-                "@main-scenarios"}
+                "@main"}
 )
 class CucumberTestCase {
 }

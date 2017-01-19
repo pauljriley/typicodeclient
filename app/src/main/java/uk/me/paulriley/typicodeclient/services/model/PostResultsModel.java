@@ -4,16 +4,13 @@ import java.io.Serializable;
 
 public class PostResultsModel implements Serializable {
     private int userId;
-    private int Id;
+    private int id;
     private String title;
     private String body;
 
-    public PostResultsModel() {
-    }
-
     public PostResultsModel(int userId, int Id, String title, String body) {
         this.userId = userId;
-        this.Id = Id;
+        this.id = Id;
         this.title = title;
         this.body = body;
     }
@@ -27,11 +24,11 @@ public class PostResultsModel implements Serializable {
     }
 
     public int getId() {
-        return Id;
+        return id;
     }
 
     public void setId(int id) {
-        Id = id;
+        id = id;
     }
 
     public String getTitle() {

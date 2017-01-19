@@ -3,7 +3,6 @@ package uk.me.paulriley.typicodeclient.view.home.homeList;
 import android.content.Context;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 
 import com.devspark.robototextview.widget.RobotoTextView;
@@ -25,8 +24,6 @@ public class ListResultsViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void setUserAvatar(String imageUrl) {
-        Log.d("---->" + this, "imageUrl: " + imageUrl);
-
         Uri uri = Uri.parse(imageUrl);
         userAvatar.setImageURI(uri);
     }

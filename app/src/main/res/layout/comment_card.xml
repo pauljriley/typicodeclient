@@ -1,6 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/card_background"
+    android:padding="3dp"
+    android:layout_margin="5dp"
+    android:elevation="4dp">
+
+    <com.devspark.robototextview.widget.RobotoTextView
+        android:id="@+id/comment_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"
+        android:textColor="@android:color/black"
+        app:textStyle="normal"
+        app:fontFamily="roboto"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:maxLines="3"
+        android:ellipsize="end"/>
+
+    <com.devspark.robototextview.widget.RobotoTextView
+        android:id="@+id/comment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textColor="@android:color/black"
+        app:textStyle="normal"
+        app:fontFamily="roboto"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:maxLines="3"
+        android:ellipsize="end"/>
+
+    <LinearLayout
+        android:id="@+id/comment_user"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:paddingBottom="8dp">
+
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/comment_user_avatar"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            fresco:placeholderImage="@drawable/default_avatar"/>
+
+        <com.devspark.robototextview.widget.RobotoTextView
+            android:id="@+id/comment_user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textColor="@android:color/black"
+            android:gravity="center_vertical"
+            app:textStyle="normal"
+            app:fontFamily="roboto"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"/>
+
+    </LinearLayout>
 
 </LinearLayout>

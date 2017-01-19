@@ -7,10 +7,22 @@ public class UserResultsModel implements Serializable {
     private String name;
     private String username;
     private String email;
-    private UserAddress address;
+    private UserAddressModel address;
     private String phone;
     private String website;
-    private UserCompany company;
+    private UserCompanyModel company;
+
+    public UserResultsModel(int id, String name, String userName, String email
+        , UserAddressModel address, String phone, String webSite, UserCompanyModel company) {
+        this.id = id;
+        this.name = name;
+        this.username = userName;
+        this.email = email;
+        this.address = address;
+        this.phone = phone;
+        this.website = webSite;
+        this.company = company;
+    }
 
     public int getId() {
         return id;
@@ -36,11 +48,11 @@ public class UserResultsModel implements Serializable {
         this.username = username;
     }
 
-    public UserAddress getAddress() {
+    public UserAddressModel getAddress() {
         return address;
     }
 
-    public void setAddress(UserAddress address) {
+    public void setAddress(UserAddressModel address) {
         this.address = address;
     }
 
@@ -60,11 +72,11 @@ public class UserResultsModel implements Serializable {
         this.website = website;
     }
 
-    public UserCompany getCompany() {
+    public UserCompanyModel getCompany() {
         return company;
     }
 
-    public void setCompany(UserCompany company) {
+    public void setCompany(UserCompanyModel company) {
         this.company = company;
     }
 
@@ -74,64 +86,5 @@ public class UserResultsModel implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    private class UserAddress implements Serializable {
-        private String street;
-        private String suite;
-        private String city;
-        private String zipcode;
-        private UserAddressGeo geo;
-
-        private class UserAddressGeo {
-            private String lat;
-            private String lng;
-
-            public String getLat() {
-                return lat;
-            }
-
-            public void setLat(String lat) {
-                this.lat = lat;
-            }
-
-            public String getLng() {
-                return lng;
-            }
-
-            public void setLng(String lng) {
-                this.lng = lng;
-            }
-        }
-    }
-
-    private class UserCompany implements Serializable {
-        private String name;
-        private String catchPhrase;
-        private String bs;
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public String getCatchPhrase() {
-            return catchPhrase;
-        }
-
-        public void setCatchPhrase(String catchPhrase) {
-            this.catchPhrase = catchPhrase;
-        }
-
-        public String getBs() {
-            return bs;
-        }
-
-        public void setBs(String bs) {
-            this.bs = bs;
-        }
     }
 }

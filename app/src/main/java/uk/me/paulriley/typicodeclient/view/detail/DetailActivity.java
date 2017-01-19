@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
 import com.devspark.robototextview.widget.RobotoTextView;
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -28,11 +29,14 @@ import uk.me.paulriley.typicodeclient.services.model.PostResultsModel;
 import uk.me.paulriley.typicodeclient.services.model.UserResultsModel;
 import uk.me.paulriley.typicodeclient.services.typicode.TypicodeFacade;
 import uk.me.paulriley.typicodeclient.services.typicode.TypicodeResults;
+import uk.me.paulriley.typicodeclient.support.util.CountingIdlingResourceListener;
 import uk.me.paulriley.typicodeclient.view.detail.commentList.CommentAdapter;
 
 public class DetailActivity extends AppCompatActivity implements DetailView {
     private static final String POST_RESULT_MODEL = DetailActivity.class.getSimpleName()
             + "_post_result_model";
+
+    private static CountingIdlingResourceListener sIdlingNotificationListener;
 
     @Inject TypicodeFacade mTypicodeFacade;
     @Inject DetailPresenter mPresenter;
@@ -64,6 +68,8 @@ public class DetailActivity extends AppCompatActivity implements DetailView {
         setContentView(R.layout.activity_detail);
 
         ButterKnife.bind(this);
+
+        mPresenter.initialise(this);
 
         initialiseListView();
 
@@ -128,6 +134,10 @@ public class DetailActivity extends AppCompatActivity implements DetailView {
         mCommentView.setAdapter(mCommentAdapter);
     }
 
+    public static void setIdlingNotificationListener(CountingIdlingResourceListener idlingNotificationListener) {
+        sIdlingNotificationListener = idlingNotificationListener;
+    }
+
     @Override
     public void updateData(ArrayList<CommentResultsModel> postComments) {
         comments.clear();
@@ -148,17 +158,5 @@ public class DetailActivity extends AppCompatActivity implements DetailView {
         }
 
         super.onDestroy();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        if (mPresenter == null) {
-            ((TypicodeApplication) getApplication()).inject(this);
-        }
-
-        mPresenter.initialise(this);
-        mPresenter.getPost();
     }
 }

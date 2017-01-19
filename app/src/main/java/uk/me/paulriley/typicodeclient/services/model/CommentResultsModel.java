@@ -4,10 +4,18 @@ import java.io.Serializable;
 
 public class CommentResultsModel implements Serializable {
     private int postId;
-    private int Id;
+    private int id;
     private String name;
     private String email;
     private String body;
+
+    public CommentResultsModel(int postId, int id, String name, String email, String body) {
+        this.postId = postId;
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.body = body;
+    }
 
     public int getPostId() {
         return postId;
@@ -18,11 +26,11 @@ public class CommentResultsModel implements Serializable {
     }
 
     public int getId() {
-        return Id;
+        return id;
     }
 
     public void setId(int id) {
-        Id = id;
+        this.id = id;
     }
 
     public String getName() {

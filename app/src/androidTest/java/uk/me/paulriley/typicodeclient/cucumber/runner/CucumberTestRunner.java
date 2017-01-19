@@ -8,8 +8,6 @@ import cucumber.api.android.CucumberInstrumentationCore;
 
 public class CucumberTestRunner extends android.support.test.runner.AndroidJUnitRunner {
 
-    public static final String TAG = CucumberTestRunner.class.getSimpleName();
-
     private static final String CUCUMBER_TAGS_KEY = "tags";
     private final CucumberInstrumentationCore instrumentationCore
             = new CucumberInstrumentationCore(this);

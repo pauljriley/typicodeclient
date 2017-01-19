@@ -1,34 +1,49 @@
 package uk.me.paulriley.typicodeclient.cucumber.pages;
 
-import java.util.List;
+import android.support.annotation.NonNull;
+import android.support.test.espresso.contrib.RecyclerViewActions;
+import android.view.View;
+
+import org.hamcrest.Matcher;
 
 import uk.me.paulriley.typicodeclient.R;
-import uk.me.paulriley.typicodeclient.services.model.PostResultsModel;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
+import static android.support.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.core.AllOf.allOf;
 
 public class MainPage extends BasePage {
-    protected static final String SCREENSHOT_TAG = "MainPage";
-
     public MainPage() {
         onView(withId(R.id.activity_main)).check(matches(isDisplayed()));
     }
 
-    public void checkPostsList(List<PostResultsModel> postResultsModels) {
+    public void checkPostsList() {
         onView(withId(R.id.posts_list)).check(matches(isDisplayed()));
-
-        for (int i = 0; i < postResultsModels.size(); i++) {
-            onView(withId(R.id.posts_list)).check(matches(atPosition(i + 1, withText(postResultsModels.get(i).getTitle()))));
-        }
+        onView(withId(R.id.posts_list)).check(matches(isCompletelyDisplayed()));
     }
 
     public void selectAPostFromList() {
-        onView(withId(R.id.posts_list)).perform(actionOnItemAtPosition(0, click()));
+        onView(getDisplayedPostsRecyclerView())
+                .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+    }
+
+    public void checkPostDetails() {
+        onView(withId(R.id.post_title)).check(matches(isDisplayed()));
+        onView(withId(R.id.post_body)).check(matches(isDisplayed()));
+        onView(withId(R.id.post_user_avatar)).check(matches(isDisplayed()));
+        onView(withId(R.id.post_user_name)).check(matches(isDisplayed()));
+        onView(withId(R.id.comments)).check(matches(isDisplayed()));
+        onView(withId(R.id.comments)).check(matches(isCompletelyDisplayed()));
+    }
+
+    @NonNull
+    private Matcher<View> getDisplayedPostsRecyclerView() {
+        return allOf(
+                withId(R.id.posts_list),
+                isDisplayed());
     }
 }
