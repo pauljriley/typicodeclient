@@ -1,6 +1,7 @@
 package uk.me.paulriley.typicodeclient.view.home;
 
 import android.content.Context;
+import android.support.annotation.VisibleForTesting;
 
 import java.util.ArrayList;
 
@@ -16,10 +17,10 @@ import uk.me.paulriley.typicodeclient.services.typicode.TypicodeResults;
 public class HomePresenterImpl implements HomePresenter {
     @Inject TypicodeFacade mTypicodeFacade;
 
-    private HomeView mView;
+    @VisibleForTesting HomeView mView;
 
-    public HomePresenterImpl(Context mContext) {
-        ((TypicodeApplication) mContext).inject(this);
+    public HomePresenterImpl(TypicodeApplication application) {
+        application.inject(this);
     }
 
     @Override

@@ -1,6 +1,6 @@
 package uk.me.paulriley.typicodeclient.view.detail;
 
-import android.content.Context;
+import android.support.annotation.VisibleForTesting;
 
 import java.util.ArrayList;
 
@@ -16,10 +16,10 @@ import uk.me.paulriley.typicodeclient.services.typicode.TypicodeResults;
 public class DetailPresenterImpl implements DetailPresenter {
     @Inject TypicodeFacade mTypicodeFacade;
 
-    private DetailView mView;
+    @VisibleForTesting DetailView mView;
 
-    public DetailPresenterImpl(Context mContext) {
-        ((TypicodeApplication) mContext).inject(this);
+    public DetailPresenterImpl(TypicodeApplication application) {
+        application.inject(this);
     }
 
     @Override

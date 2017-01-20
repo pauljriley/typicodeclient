@@ -6,6 +6,7 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import uk.me.paulriley.typicodeclient.TypicodeApplication;
 import uk.me.paulriley.typicodeclient.view.detail.DetailActivity;
 import uk.me.paulriley.typicodeclient.view.detail.DetailPresenter;
 import uk.me.paulriley.typicodeclient.view.detail.DetailPresenterImpl;
@@ -33,7 +34,7 @@ public class PresenterModule {
     @Singleton
     HomePresenter providesHomePresenter() {
         if (mHomePresenter == null) {
-            mHomePresenter = new HomePresenterImpl(mContext);
+            mHomePresenter = new HomePresenterImpl((TypicodeApplication) mContext);
         }
 
         return mHomePresenter;
@@ -43,7 +44,7 @@ public class PresenterModule {
     @Singleton
     DetailPresenter providesDetailPresenter() {
         if (mDetailPresenter == null) {
-            mDetailPresenter = new DetailPresenterImpl(mContext);
+            mDetailPresenter = new DetailPresenterImpl((TypicodeApplication) mContext);
         }
 
         return mDetailPresenter;
